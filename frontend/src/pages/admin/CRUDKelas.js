@@ -65,7 +65,7 @@ export default class CRUDKelas extends React.Component {
         this.setState({
             action: "update",
             id_kelas: selectedItem.id_kelas,
-            kelas: selectedItem.nama_kelas,
+            nama_kelas: selectedItem.nama_kelas,
             kompetensi_keahlian: selectedItem.kompetensi_keahlian
         })
     }
