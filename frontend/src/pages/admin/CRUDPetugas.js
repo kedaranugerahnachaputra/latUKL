@@ -132,7 +132,7 @@ export default class CRUDPetugas extends React.Component {
                                 nama_petugas={item.nama_petugas}
                                 level={item.level}
                                 onEdit={() => this.Edit(item)}
-                                onDrop={() => this.dropSiswa(item)}
+                                onDrop={() => this.dropPetugas(item)}
                             />
                         ))}
                     </div>
