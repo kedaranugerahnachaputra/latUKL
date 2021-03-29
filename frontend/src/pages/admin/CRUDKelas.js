@@ -119,7 +119,7 @@ export default class CRUDKelas extends React.Component {
                                 nama_kelas={item.nama_kelas}
                                 kompetensi_keahlian={item.kompetensi_keahlian}
                                 onEdit={() => this.Edit(item)}
-                                onDrop={() => this.dropSpp(item)}
+                                onDrop={() => this.dropKelas(item)}
                             />
                         ))}
                     </div>
