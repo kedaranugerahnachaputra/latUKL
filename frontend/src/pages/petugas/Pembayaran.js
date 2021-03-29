@@ -1,0 +1,178 @@
+import React from "react"
+import Navbar from "../../component/NavbarPetugas"
+import axios from "axios"
+import $ from "jquery"
+import { base_url } from "../../config"
+
+export default class Pembayaran extends React.Component {
+    constructor() {
+        super()
+        this.state = {
+            siswa: [],
+            petugasName: null,
+            token: "",
+            action: "",
+            id_pembayaran: 0,
+            id_petugas: "",
+            nama_petugas: "",
+            nisn: "",
+            nama: "",
+            tgl_bayar: new Date().toISOString().split('T')[0],
+            bulan_dibayar: "",
+            tahun_dibayar: "",
+            id_spp: "",
+            jumlah_bayar: ""
+        }
+
+        if (localStorage.getItem("token")) {
+            this.state.token = localStorage.getItem("token")
+        } else {
+            window.location = "/login"
+        }
+        this.headerConfig.bind(this)
+    }
+    headerConfig = () => {
+        let header = {
+            headers: { Authorization: `Bearer ${this.state.token}` }
+        }
+        return header
+    }
+    getSiswa = () => {
+        let url = base_url + "/siswa"
+        axios.get(url, this.headerConfig())
+            .then(response => {
+                this.setState({ siswa: response.data })
+            })
+            .catch(error => {
+                if (error.response) {
+                    if (error.response.status) {
+                        window.alert(error.response.data.message)
+                    }
+                } else {
+                    console.log(error);
+                }
+            })
+    }
+    getPetugas = () => {
+        let petugas = JSON.parse(localStorage.getItem('petugas'))
+        this.setState({ petugasName: petugas.nama_petugas })
+        this.setState({ id_petugas: petugas.id_petugas })
+    }
+    componentDidMount() {
+        this.getSiswa()
+        this.getPetugas()
+    }
+    ada = event => {
+        let url = base_url + "/siswa/" + event
+        axios.get(url, this.headerConfig())
+            .then(response => {
+                this.setState({
+                    nisn: response.data[0].nisn,
+                    id_spp: response.data[0].id_spp,
+                    jumlah_bayar: response.data[0].spp.nominal,
+                });
+            })
+            .catch(error => {
+                if (error.response) {
+                    if (error.response.status) {
+                        window.alert(error.response.data.message)
+                    }
+                } else {
+                    console.log(error);
+                }
+            })
+    }
+    savePembayaran = event => {
+        event.preventDefault()
+        let form = {
+            id_pembayaran: this.state.id_pembayaran,
+            id_petugas: this.state.id_petugas,
+            nisn: this.state.nisn,
+            tgl_bayar: this.state.tgl_bayar,
+            bulan_dibayar: this.state.bulan_dibayar,
+            tahun_dibayar: this.state.tahun_dibayar,
+            id_spp: this.state.id_spp,
+            jumlah_bayar: this.state.jumlah_bayar
+        }
+        let url = base_url + "/pembayaran"
+        axios.post(url, form, this.headerConfig())
+            .then(response => {
+                window.alert(response.data.message)
+            })
+            .catch(error => console.log(error))
+    }
+
+    render() {
+        return (
+            <div>
+                <Navbar />
+                <div className="container">
+                    <h3 className="text-bold text-info mt-2">Form Pembayaran</h3>
+                    <div >
+                        <form onSubmit={ev => this.savePembayaran(ev)}>
+                            Nama Petugas
+                                     <input type="text" className="form-control mb-1"
+                                value={this.state.petugasName}
+                                onChange={ev => this.setState({ nama_petugas: ev.target.value })}
+                                disabled
+                            />
+                            Nama Siswa
+                            <select name="nama" className="form-control mb-1" onChange={ev => this.ada(ev.target.value)}>
+                                {this.state.siswa.map(item => (
+                                    <option value={item.nama}
+                                    >
+                                        {item.nama}
+                                    </option>
+
+                                ))}
+                            </select>
+                            Tanggal Dibayar
+                                     <input type="text" className="form-control mb-1"
+                                value={this.state.tgl_bayar}
+                                onChange={ev => this.setState({ tgl_bayar: ev.target.value })}
+                                disabled
+                            />
+                            Bulan Bayar
+                            <select name="bulan" className="form-control mb-1">
+                                <option value={this.state.bulan_dibayar = "Januari"} onChange={ev => this.setState({ bulan_dibayar: ev.target.value })}>Januari</option>
+                                <option value={this.state.bulan_dibayar = "Febriari"} onChange={ev => this.setState({ bulan_dibayar: ev.target.value })}>Febriari</option>
+                                <option value={this.state.bulan_dibayar = "Maret"} onChange={ev => this.setState({ bulan_dibayar: ev.target.value })}>Maret</option>
+                                <option value={this.state.bulan_dibayar = "April"} onChange={ev => this.setState({ bulan_dibayar: ev.target.value })}>April</option>
+                                <option value={this.state.bulan_dibayar = "Mei"} onChange={ev => this.setState({ bulan_dibayar: ev.target.value })}>Mei</option>
+                                <option value={this.state.bulan_dibayar = "Juni"} onChange={ev => this.setState({ bulan_dibayar: ev.target.value })}>Juni</option>
+                                <option value={this.state.bulan_dibayar = "Juli"} onChange={ev => this.setState({ bulan_dibayar: ev.target.value })}>Juli</option>
+                                <option value={this.state.bulan_dibayar = "Agustus"} onChange={ev => this.setState({ bulan_dibayar: ev.target.value })}>Agustus</option>
+                                <option value={this.state.bulan_dibayar = "September"} onChange={ev => this.setState({ bulan_dibayar: ev.target.value })}>September</option>
+                                <option value={this.state.bulan_dibayar = "Oktober"} onChange={ev => this.setState({ bulan_dibayar: ev.target.value })}>Oktober</option>
+                                <option value={this.state.bulan_dibayar = "November"} onChange={ev => this.setState({ bulan_dibayar: ev.target.value })}>November</option>
+                                <option value={this.state.bulan_dibayar = "Desember"} onChange={ev => this.setState({ bulan_dibayar: ev.target.value })}>Desember</option>
+                            </select>
+                            Tahun Bayar
+                            <select name="tahun" className="form-control mb-1">
+                                <option value={this.state.tahun_dibayar = "2018"} onChange={ev => this.setState({ tahun_dibayar: ev.target.value })}>2018</option>
+                                <option value={this.state.tahun_dibayar = "2019"} onChange={ev => this.setState({ tahun_dibayar: ev.target.value })}>2019</option>
+                                <option value={this.state.tahun_dibayar = "2020"} onChange={ev => this.setState({ tahun_dibayar: ev.target.value })}>2020</option>
+                                <option value={this.state.tahun_dibayar = "2021"} onChange={ev => this.setState({ tahun_dibayar: ev.target.value })}>2021</option>
+                                <option value={this.state.tahun_dibayar = "2022"} onChange={ev => this.setState({ tahun_dibayar: ev.target.value })}>2022</option>
+                                <option value={this.state.tahun_dibayar = "2023"} onChange={ev => this.setState({ tahun_dibayar: ev.target.value })}>2023</option>
+                            </select>
+                            ID SPP
+                                     <input type="text" className="form-control mb-1"
+                                value={this.state.id_spp}
+                                disabled
+                            />
+                            Jumlah Bayar
+                                     <input type="text" className="form-control mb-3"
+                                value={this.state.jumlah_bayar}
+                                disabled
+                            />
+                            <button type="submit" className="btn btn-block btn-success">
+                                Simpan
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        )
+    }
+}
