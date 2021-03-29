@@ -70,6 +70,7 @@ export default class Pembayaran extends React.Component {
                     nisn: response.data[0].nisn,
                     id_spp: response.data[0].id_spp,
                     jumlah_bayar: response.data[0].spp.nominal,
+                    tahun_dibayar: response.data[0].spp.tahun,
                 });
             })
             .catch(error => {
@@ -148,14 +149,10 @@ export default class Pembayaran extends React.Component {
                                 <option value={this.state.bulan_dibayar = "Desember"} onChange={ev => this.setState({ bulan_dibayar: ev.target.value })}>Desember</option>
                             </select>
                             Tahun Bayar
-                            <select name="tahun" className="form-control mb-1">
-                                <option value={this.state.tahun_dibayar = "2018"} onChange={ev => this.setState({ tahun_dibayar: ev.target.value })}>2018</option>
-                                <option value={this.state.tahun_dibayar = "2019"} onChange={ev => this.setState({ tahun_dibayar: ev.target.value })}>2019</option>
-                                <option value={this.state.tahun_dibayar = "2020"} onChange={ev => this.setState({ tahun_dibayar: ev.target.value })}>2020</option>
-                                <option value={this.state.tahun_dibayar = "2021"} onChange={ev => this.setState({ tahun_dibayar: ev.target.value })}>2021</option>
-                                <option value={this.state.tahun_dibayar = "2022"} onChange={ev => this.setState({ tahun_dibayar: ev.target.value })}>2022</option>
-                                <option value={this.state.tahun_dibayar = "2023"} onChange={ev => this.setState({ tahun_dibayar: ev.target.value })}>2023</option>
-                            </select>
+                                    <input type="text" className="form-control mb-1"
+                                value={this.state.tahun_dibayar}
+                                disabled
+                            />
                             ID SPP
                                      <input type="text" className="form-control mb-1"
                                 value={this.state.id_spp}
